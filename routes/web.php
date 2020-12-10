@@ -7,10 +7,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/empleados', function () {
-    return view('empleados.index');
-});
+Route::resource('empleados', 'EmpleadosController');
+Auth::routes();
 
-Route::get('/empleados/create', function () {
-    return view('empleados.create');
-});
+Route::get('/home', 'HomeController@index')->name('home');
