@@ -1,20 +1,28 @@
 
+@extends('layouts.app')
 
-@if(Session:has('Mensaje')){{
-    Session:get('Mensaje')
-}}
+@section('content')
+
+<div class="container">
+
+@if(Session::has('Mensaje')) 
+
+<div class="alert alert-success" role="alert">
+{{  Session::get('Mensaje')  }}
+</div>
+
 @endif
 
-<a href="{{ url('empleados/create') }}">Agregar Empleado</a>
+<a href="{{ url('empleados/create') }}" class="btn btn-success">Agregar Empleado</a>
+<br/>
+<br/>
+<table class="table table-light table-hover">
 
-<table class="table table-light">
-
-    <thead class="table table-light">
+    <thead class="thead light">
         <tr>
             <th>#</th>
             <th>Foto</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
+            <th>Nombre</th> 
             <th>Correo</th>
             <th>Acciones</th>
         </tr>
@@ -24,23 +32,20 @@
     @foreach($empleados as $empleado)
         <tr>
             <td>{{$loop->iteration}}</td>
-            <td>
-            
-            <img src="{{ asset('storage').'/'. $empleado->Foto}}" alt="" with="150">
-                    
+            <td>           
+            <img src="{{ asset('storage').'/'. $empleado->Foto}}" class="img-thumbnail img-fluid" alt="" with="100">                   
             </td>
-            <td>{{ $empleado->Nombre}}</td>
-            <td>{{ $empleado->Apellido}}</td>
+            <td>{{ $empleado->Nombre}} {{ $empleado->Apellido}} </td>
             <td>{{ $empleado->Correo}}</td>
             <td>
 
-            <a href="{{ url('/empleados/'.$empleado->id.'/edit') }}">
-            Editar </a>
-            | 
-            <form action="post" action="{{ url('/empleados/'.$empleado->id) }}">
+            <a class="btn btn-warning" href="{{ url('/empleados/'.$empleado->id.'/edit') }}">Editar
+            </a>
+
+            <form action="post" action="{{ url('/empleados/'.$empleado->id) }}" style="display:inline">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
-            <button type="submit" onclick="return confirm('¿Seguro desea borrar?');">Borrar</button>
+            <button class="btn btn-danger" type="submit" onclick="return confirm('¿Seguro desea borrar?');">Borrar</button>
             </form> 
             
             </td>
@@ -49,3 +54,9 @@
     </tbody>
 
 </table>
+
+{{ $empleados->links() }}
+
+</div>
+
+@endsection

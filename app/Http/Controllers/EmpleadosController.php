@@ -16,7 +16,7 @@ class EmpleadosController extends Controller
     public function index()
     {
         //
-        $datos['empleados']=Empleados::paginate(5);
+        $datos['empleados']=Empleados::paginate(1);
         return view('empleados.index', $datos);
     }
 
@@ -24,6 +24,9 @@ class EmpleadosController extends Controller
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
+     * 
+     * 
+     * 
      */
     public function create()
     {
@@ -39,6 +42,17 @@ class EmpleadosController extends Controller
     public function store(Request $request)
     {
         //obtener datos del empleado
+
+        $campos=[
+            'Nombre'=>'required|string|max:100',
+            'Apellido'=>'required|string|max:100',
+            'Correo'=>'required|email',
+            'Foto'=>'required|max:10000|mimes:jpeg,png,jpg'
+        ];
+        $Mensaje=["required"=>'El attribute es requerido'];
+
+        $this->validate($request,$campos,$Mensaje);
+
         $datosEmpleado=request()->except('_token');
 
         if($request->hasFile('Foto')){
@@ -85,6 +99,21 @@ class EmpleadosController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $campos=[
+            'Nombre'=>'required|string|max:100',
+            'Apellido'=>'required|string|max:100',
+            'Correo'=>'required|email',           
+        ];      
+
+        if($request->hasFile('Foto')){
+            $campos+=['Foto'=>'required|max:10000|mimes:jpeg,png,jpg'];
+        }
+
+        $Mensaje=["required"=>'El attribute es requerido'];
+
+        $this->validate($request,$campos,$Mensaje);
+
         $datosEmpleado=request()->except(['_token','_method']);
 
         if($request->hasFile('Foto')){
